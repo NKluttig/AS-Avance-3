@@ -7,27 +7,33 @@
 </head>
 <body>
   <h1>Página de Administración</h1>
-  
+
   <h2>Cargar Datos de Optimetría</h2>
   <form id="upload-form">
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="nombre" required>
-    
+
     <label for="apellido">Apellido:</label>
     <input type="text" id="apellido" name="apellido" required>
-    
+
     <label for="edad">Edad:</label>
     <input type="number" id="edad" name="edad" required>
-    
+
     <label for="rut">Rut (Formato xx.xxx.xxx-x):</label>
     <input type="text" id="rut" name="rut" required pattern="\d{2}\.\d{3}\.\d{3}-\w">
-    
+
     <label for="tipo-lentes">Tipo de Lentes:</label>
     <select id="tipo-lentes" name="tipo-lentes" required>
       <option value="lejos">Lejos</option>
       <option value="cerca">Cerca</option>
     </select>
-    
+
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha" name="fecha" required>
+
+    <label for="pdf">Archivo PDF:</label>
+    <input type="file" id="pdf" name="pdf" accept=".pdf" required>
+
     <h3>Datos de la Optometría</h3>
     <table>
       <thead>
@@ -60,97 +66,58 @@
         </tr>
       </tbody>
     </table>
-    
+
     <button type="submit">Guardar Datos</button>
-  </form>
-  
-  <h2>Descargar Optometría</h2>
-  <form id="download-form">
-    <label for="rut-descargar">Rut del Paciente:</label>
-    <input type="text" id="rut-descargar" name="rut-descargar" required pattern="\d{2}\.\d{3}\.\d{3}-\w">
-    <button type="submit">Descargar Optometría</button>
   </form>
 
   <script>
-    var form = document.getElementById('upload-form');
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
+    // Obtener el formulario de carga
+    const uploadForm = document.getElementById('upload-form');
 
-      var nombre = document.getElementById('nombre').value;
-      var apellido = document.getElementById('apellido').value;
-      var edad = document.getElementById('edad').value;
-      var rut = document.getElementById('rut').value;
-      var tipoLentes = document.getElementById('tipo-lentes').value;
-      var odEsf = document.getElementsByName('od-esf')[0].value;
-      var oiEsf = document.getElementsByName('oi-esf')[0].value;
-      var odCil = document.getElementsByName('od-cil')[0].value;
-      var oiCil = document.getElementsByName('oi-cil')[0].value;
-      var odEje = document.getElementsByName('od-eje')[0].value;
-      var oiEje = document.getElementsByName('oi-eje')[0].value;
-      var odDp = document.getElementsByName('od-dp')[0].value;
-      var oiDp = document.getElementsByName('oi-dp')[0].value;
+    // Agregar un controlador de eventos para el envío del formulario
+    uploadForm.addEventListener('submit', event => {
+      event.preventDefault(); // Evitar el envío del formulario por defecto
 
-      // Crear objeto con los datos de la optometría
-      var optometriaData = {
-        rut: rut,
-        nombre: nombre,
-        apellido: apellido,
-        edad: edad,
-        tipoLentes: tipoLentes,
-        od: {
-          esf: odEsf,
-          cil: odCil,
-          eje: odEje,
-          dp: odDp
-        },
-        oi: {
-          esf: oiEsf,
-          cil: oiCil,
-          eje: oiEje,
-          dp: oiDp
+      // Obtener los valores ingresados en el formulario
+      const nombre = document.getElementById('nombre').value;
+      const apellido = document.getElementById('apellido').value;
+      const edad = document.getElementById('edad').value;
+      const rut = document.getElementById('rut').value;
+      const tipoLentes = document.getElementById('tipo-lentes').value;
+      const fecha = document.getElementById('fecha').value;
+      const pdfFile = document.getElementById('pdf').files[0]; // Obtener el archivo PDF
+
+      // Crear el ID combinando el RUT sin puntos ni guion y la fecha en formato dd_mm_aa
+      const id = rut.replace(/[.-]/g, '') + '_' + fecha.replaceAll('-', '_');
+
+      // Crear un objeto FormData para enviar los datos al servidor
+      const formData = new FormData();
+      formData.append('id', id);
+      formData.append('nombre', nombre);
+      formData.append('apellido', apellido);
+      formData.append('edad', edad);
+      formData.append('rut', rut);
+      formData.append('tipoLentes', tipoLentes);
+      formData.append('fecha', fecha);
+      formData.append('pdf', pdfFile);
+
+      // Realizar la petición AJAX al servidor para guardar los datos en MongoDB
+      fetch('/guardar_optometria', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Los datos de la optometría se han guardado correctamente.');
+          uploadForm.reset(); // Limpiar el formulario
+        } else {
+          alert('Ha ocurrido un error al guardar los datos de la optometría.');
         }
-      };
-
-      // Generar nombre de archivo basado en el rut
-      var archivo = rut.replace(/\./g, '').replace(/-/g, '') + '.json';
-
-      // Crear objeto Blob con los datos de la optometría
-      var optometriaBlob = new Blob([JSON.stringify(optometriaData)], { type: 'application/json' });
-
-      // Crear enlace de descarga
-      var downloadLink = document.createElement('a');
-      downloadLink.href = URL.createObjectURL(optometriaBlob);
-      downloadLink.download = archivo;
-
-      // Agregar enlace al documento
-      document.body.appendChild(downloadLink);
-
-      // Simular clic en el enlace para iniciar la descarga
-      downloadLink.click();
-
-      // Remover el enlace del documento
-      document.body.removeChild(downloadLink);
-
-      // Limpiar formulario
-      form.reset();
-    });
-
-    var downloadForm = document.getElementById('download-form');
-    downloadForm.addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      var rutDescargar = document.getElementById('rut-descargar').value;
-      var archivo = rutDescargar.replace(/\./g, '').replace(/-/g, '') + '.json';
-
-      var downloadLink = document.createElement('a');
-      downloadLink.href = archivo;
-      downloadLink.download = archivo;
-
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-
-      downloadForm.reset();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Ha ocurrido un error al guardar los datos de la optometría.');
+      });
     });
   </script>
 </body>
