@@ -60,4 +60,11 @@ body {
   a:hover {
     background-color: #0056b3;
   }
+  .custom-label {
+    color: #333; /* Color del texto */
+    font-size: 16px; /* Tamaño de la fuente */
+    font-weight: bold; /* Grosor de la fuente */
+    margin-bottom: 10px; /* Espacio inferior */
+    /* Otros estilos que desees aplicar */
+  }
   
