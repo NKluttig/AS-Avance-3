@@ -84,6 +84,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div className="logIn-form">
+        <img src="https://cdn.discordapp.com/attachments/1091165133948076107/1121669389066977350/image.png" alt="Imagen" />
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <p>Nombre</p>
             <input
@@ -196,6 +197,7 @@ function App() {
         </div>
         {operativosEncontrados.length > 0 && (
   <div>
+    <img src="https://cdn.discordapp.com/attachments/1091165133948076107/1121669389066977350/image.png" alt="Imagen" />
     <h2>Operativos Encontrados:</h2>
     <table>
       <thead>
