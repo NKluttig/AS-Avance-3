@@ -2,34 +2,58 @@
 <html>
 <head>
   <title>Descargar Optometría</title>
-  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <h1>Descargar Optometría</h1>
-  
-  <h2>Optometrías Disponibles</h2>
-  <ul id="optometrias-list"></ul>
+
+  <label for="rut">Rut del paciente:</label>
+  <input type="text" id="rut" name="rut" required>
+
+  <button id="download-button">Descargar Optometría</button>
 
   <script>
-    // Datos de las optometrías (simulación)
-    var optometrias = [
-      { id: 1, nombre: 'Optometría 1', archivo: 'datos_optometria1.json' },
-      { id: 2, nombre: 'Optometría 2', archivo: 'datos_optometria2.json' },
-      { id: 3, nombre: 'Optometría 3', archivo: 'datos_optometria3.json' }
-    ];
+    // Función para generar el archivo descargable y comenzar la descarga al hacer clic en el botón
+    function generateAndDownloadFile(data) {
+      // Convertir los datos en formato JSON a un objeto Blob
+      const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
 
-    // Obtener la lista de optometrías
-    var optometriasList = document.getElementById('optometrias-list');
+      // Crear un enlace de descarga
+      const downloadLink = document.createElement('a');
+      downloadLink.href = URL.createObjectURL(blob);
 
-    // Generar los elementos de la lista
-    optometrias.forEach(function(optometria) {
-      var listItem = document.createElement('li');
-      var link = document.createElement('a');
-      link.href = optometria.archivo;
-      link.download = optometria.archivo;
-      link.innerText = optometria.nombre;
-      listItem.appendChild(link);
-      optometriasList.appendChild(listItem);
+      // Establecer el nombre del archivo descargado usando el Rut del paciente (sin caracteres no deseados)
+      const sanitizedRut = rut.replace(/[.-]/g, '');
+      downloadLink.download = `${sanitizedRut}_optometria.json`;
+
+      // Agregar el enlace de descarga al documento
+      document.body.appendChild(downloadLink);
+
+      // Crear el botón de descarga
+      const downloadButton = document.getElementById('download-button');
+
+      // Agregar un controlador de eventos al botón para iniciar la descarga
+      downloadButton.addEventListener('click', () => {
+        downloadLink.click();
+      });
+    }
+
+    // Obtener el Rut del paciente ingresado por el usuario
+    const rut = document.getElementById('rut');
+
+    // Agregar un controlador de eventos al botón para descargar la optometría
+    const downloadButton = document.getElementById('download-button');
+    downloadButton.addEventListener('click', () => {
+      const patientRut = rut.value;
+
+      // Realizar una solicitud al servidor para obtener los datos de optometría asociados al Rut del paciente
+      fetch(`/api/optometria?rut=${patientRut}`)
+        .then(response => response.json())
+        .then(data => {
+          generateAndDownloadFile(data); // Generar el botón de descarga con los datos obtenidos
+        })
+        .catch(error => {
+          console.error('Error al obtener los datos de optometría:', error);
+        });
     });
   </script>
 </body>
