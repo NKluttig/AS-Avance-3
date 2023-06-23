@@ -22,31 +22,29 @@
       downloadLink.href = URL.createObjectURL(blob);
 
       // Establecer el nombre del archivo descargado usando el Rut del paciente (sin caracteres no deseados)
-      const sanitizedRut = rut.replace(/[.-]/g, '');
+      const sanitizedRut = rutInput.value.replace(/[.-]/g, '');
       downloadLink.download = `${sanitizedRut}_optometria.json`;
 
       // Agregar el enlace de descarga al documento
-      document.body.appendChild(downloadLink);
+      const downloadButton = document.getElementById('download-button');
+      downloadButton.parentNode.insertBefore(downloadLink, downloadButton.nextSibling);
 
       // Crear el botón de descarga
-      const downloadButton = document.getElementById('download-button');
-
-      // Agregar un controlador de eventos al botón para iniciar la descarga
       downloadButton.addEventListener('click', () => {
         downloadLink.click();
       });
     }
 
-    // Obtener el Rut del paciente ingresado por el usuario
-    const rut = document.getElementById('rut');
+    // Obtener el campo de entrada del Rut del paciente
+    const rutInput = document.getElementById('rut');
 
     // Agregar un controlador de eventos al botón para descargar la optometría
     const downloadButton = document.getElementById('download-button');
     downloadButton.addEventListener('click', () => {
-      const patientRut = rut.value;
+      const patientRut = rutInput.value;
 
       // Realizar una solicitud al servidor para obtener los datos de optometría asociados al Rut del paciente
-      fetch(`/api/optometria?rut=${patientRut}`)
+      fetch(`/api/optometrias?rut=${patientRut}`)
         .then(response => response.json())
         .then(data => {
           generateAndDownloadFile(data); // Generar el botón de descarga con los datos obtenidos
