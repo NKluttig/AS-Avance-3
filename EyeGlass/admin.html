@@ -2,73 +2,93 @@
 <html>
 <head>
   <title>Página de Administración</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  
+
 </head>
 <body>
-  <h1>Página de Administración</h1>
+  <div class="container">
+    <h1 class="mt-4">Página de Administración</h1>
+    <img src="EyeGlass\image.png" alt="Imagen" style="float: right;">
 
-  <h2>Cargar Datos de Optimetría</h2>
-  <form id="upload-form">
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required>
+    <h2 class="mt-4">Cargar Datos de Optimetría</h2>
+    <form id="upload-form">
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" class="form-control" id="nombre" name="nombre" required>
+      </div>
 
-    <label for="apellido">Apellido:</label>
-    <input type="text" id="apellido" name="apellido" required>
+      <div class="form-group">
+        <label for="apellido">Apellido:</label>
+        <input type="text" class="form-control" id="apellido" name="apellido" required>
+      </div>
 
-    <label for="edad">Edad:</label>
-    <input type="number" id="edad" name="edad" required>
+      <div class="form-group">
+        <label for="edad">Edad:</label>
+        <input type="number" class="form-control" id="edad" name="edad" required>
+      </div>
 
-    <label for="rut">Rut (Formato xx.xxx.xxx-x):</label>
-    <input type="text" id="rut" name="rut" required pattern="\d{2}\.\d{3}\.\d{3}-\w">
+      <div class="form-group">
+        <label for="rut">Rut (Formato xx.xxx.xxx-x):</label>
+        <input type="text" class="form-control" id="rut" name="rut" required pattern="\d{2}\.\d{3}\.\d{3}-\w">
+      </div>
 
-    <label for="tipo-lentes">Tipo de Lentes:</label>
-    <select id="tipo-lentes" name="tipo-lentes" required>
-      <option value="lejos">Lejos</option>
-      <option value="cerca">Cerca</option>
-    </select>
+      <div class="form-group">
+        <label for="tipo-lentes">Tipo de Lentes:</label>
+        <select class="form-control" id="tipo-lentes" name="tipo-lentes" required>
+          <option value="lejos">Lejos</option>
+          <option value="cerca">Cerca</option>
+        </select>
+      </div>
 
-    <label for="fecha">Fecha:</label>
-    <input type="date" id="fecha" name="fecha" required>
+      <div class="form-group">
+        <label for="fecha">Fecha:</label>
+        <input type="date" class="form-control" id="fecha" name="fecha" required>
+      </div>
 
-    <label for="pdf">Archivo PDF:</label>
-    <input type="file" id="pdf" name="pdf" accept=".pdf" required>
+      <div class="form-group">
+        <label for="pdf">Archivo PDF:</label>
+        <input type="file" class="form-control-file" id="pdf" name="pdf" accept=".pdf" required>
+      </div>
 
-    <h3>Datos de la Optometría</h3>
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>OD</th>
-          <th>OI</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>ESF</td>
-          <td><input type="number" name="od-esf" required></td>
-          <td><input type="number" name="oi-esf" required></td>
-        </tr>
-        <tr>
-          <td>CIL</td>
-          <td><input type="number" name="od-cil" required></td>
-          <td><input type="number" name="oi-cil" required></td>
-        </tr>
-        <tr>
-          <td>EJE</td>
-          <td><input type="number" name="od-eje" required></td>
-          <td><input type="number" name="oi-eje" required></td>
-        </tr>
-        <tr>
-          <td>DP</td>
-          <td><input type="number" name="od-dp" required></td>
-          <td><input type="number" name="oi-dp" required></td>
-        </tr>
-      </tbody>
-    </table>
+      <h3 class="mt-4">Datos de la Optometría</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>OD</th>
+            <th>OI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ESF</td>
+            <td><input type="number" class="form-control" name="od-esf" required></td>
+            <td><input type="number" class="form-control" name="oi-esf" required></td>
+          </tr>
+          <tr>
+            <td>CIL</td>
+            <td><input type="number" class="form-control" name="od-cil" required></td>
+            <td><input type="number" class="form-control" name="oi-cil" required></td>
+          </tr>
+          <tr>
+            <td>EJE</td>
+            <td><input type="number" class="form-control" name="od-eje" required></td>
+            <td><input type="number" class="form-control" name="oi-eje" required></td>
+          </tr>
+          <tr>
+            <td>DP</td>
+            <td><input type="number" class="form-control" name="od-dp" required></td>
+            <td><input type="number" class="form-control" name="oi-dp" required></td>
+          </tr>
+        </tbody>
+      </table>
 
-    <button type="submit">Guardar Datos</button>
-  </form>
+      <button type="submit" class="btn btn-primary">Guardar Datos</button>
+    </form>
+  </div>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
   <script>
     // Obtener el formulario de carga
